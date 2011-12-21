@@ -27,7 +27,6 @@ Object.extend(Object.extend(chatConnectWindow.prototype, chatWindow.prototype), 
 		var nickname = $F('input_nickname');
 		if ($F('select_network') == 'local') {
 			server = $A(chat.connectWindow.localServers).random();
-			server = $A(chat.connectWindow.freenodeServers).random();
 	        }
 		if (server && nickname != '' && nickname != undefined) {
 			chat.connect(nickname, server);
