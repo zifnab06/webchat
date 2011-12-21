@@ -903,8 +903,7 @@ class ircClient extends socketClient {
 	public function on_connect()
 	{
 		$this->send_script("chat.onConnecting();");
-		$this->write("WEBIRC aFDS7fdsf8SDF89sd0f8sd908fDf09809 webchat {$this->client_address} {$this->client_address}\r\n");
-		$this->write("PASS aFDS7fdsf8SDF89sd0f8sd908fDf09809\r\n");
+		$this->write("WEBIRC ". WEBIRC_PASS ." webchat {$this->client_address} {$this->client_address}\r\n");
 		$this->write("USER {$this->nick} ignored andirc.net :AndIRC webchat (phpChat)\r\n");
 		$this->write("NICK {$this->nick}\r\n");
 
