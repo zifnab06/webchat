@@ -776,7 +776,7 @@ class ircClient extends socketClient {
 	private function handle_message($from, $command, $to, $param, $who)
 	{
 		global $irc_codes;
-		// echo "[MSG] [$from], [$command], [$to], [$param]\n";
+		echo "[MSG] [$from], [$command], [$to], [$param]\n";
 		if (substr($to,0,1) == ':') {
 			$to = substr($to,1);
 		}
@@ -814,7 +814,7 @@ class ircClient extends socketClient {
 				break;
 			case 'JOIN':
 				if ($from == $this->nick) {
-					$this->on_joined($param);
+					$this->on_joined($to);
 					$this->get_mode($to);
 				} else {
 					$this->on_join($from, $to);
