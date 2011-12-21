@@ -144,6 +144,9 @@ class ircClient extends socketClient {
 			case 'quit':
 				$this->quit($param);
 				break;
+			case 'query':
+				$this->query($param);
+				break;
 			case 'msg':
 			case 'privmsg':
 			case 'tell':
@@ -163,6 +166,11 @@ class ircClient extends socketClient {
 	}
 
 	/*** IRC methods ***/
+
+	public function join($channel)
+	{
+		$this->write("JOIN $channel\r\n");
+	}
 
 	public function join($channel)
 	{
@@ -370,10 +378,13 @@ class ircClient extends socketClient {
 
 	public function on_privmsg($from, $msg)
 	{
+		if (!if (isset($this->channels[$channel]))) {
+			$this->on_joined($from);
+		}
 		echo "[IRC] priv_msg $from> $msg\n";
 		$from = htmlentities($from, ENT_QUOTES, 'UTF-8');
 		$msg  = htmlentities($msg,  ENT_QUOTES, 'UTF-8');
-		$this->send_script("chat.onPrivateMessage('$from','$msg');");
+		$this->send_script("chat.onMessage('$from','$channel', '$msg');");
 
 	}
 
