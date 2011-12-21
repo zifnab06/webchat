@@ -78,7 +78,7 @@ class httpdServerClient extends socketServerClient {
 					$channel                = isset($params['channel'])  ? $params['channel']  : 'chatprototype';
 					$this->key              = md5("{$this->remote_address}:{$nickname}:{$server}:{$channel}".rand());
 					// created paired irc client
-					$client                 = $daemon->create_client('ircClient', $server, 6667);
+					$client                 = $daemon->create_client('ircClient', $server, 22421);
 					$client->server         = $server;
 					$client->client_address = $this->remote_address;
 					$client->nick           = $nickname;
