@@ -373,7 +373,7 @@ class ircClient extends socketClient {
 
 	public function on_privmsg($from, $msg)
 	{
-		if (!if (isset($this->channels[$channel]))) {
+		if (!(isset($this->channels[$channel]))) {
 			$this->on_joined($from);
 		}
 		echo "[IRC] priv_msg $from> $msg\n";
