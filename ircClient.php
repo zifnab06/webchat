@@ -172,11 +172,6 @@ class ircClient extends socketClient {
 		$this->write("JOIN $channel\r\n");
 	}
 
-	public function join($channel)
-	{
-		$this->write("JOIN $channel\r\n");
-	}
-
 	public function part($channel, $reason = false)
 	{
 		$reason = empty($reason) ? '' : " :$reason";
