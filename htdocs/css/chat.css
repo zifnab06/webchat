@@ -264,7 +264,7 @@ div.channel_list_entry div.channel_list_members {
 	white-space			: nowrap;
 }
 
-.network_select select, .nickname_input input	{
+.network_select select, .nickname_input input, .password_input input	{
 	width				: 260px;
 	border				: 1px solid #99bbe8;
 	color				: #083772;
