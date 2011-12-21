@@ -20,3 +20,4 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 define('WEBIRC_PASS', "aFDS7fdsf8SDF89sd0f8sd908fDf09809");
 define('WEBIRC_SERVER', "127.0.0.1");
+define('WEBIRC_PORT', "6667");
