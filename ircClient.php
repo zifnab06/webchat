@@ -167,6 +167,10 @@ class ircClient extends socketClient {
 
 	/*** IRC methods ***/
 
+	public function query($who) {
+		$this->on_joined($who);
+	}
+	
 	public function join($channel)
 	{
 		$this->write("JOIN $channel\r\n");
