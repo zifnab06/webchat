@@ -4,6 +4,7 @@
 /****************************** main chat application  ***********************************/
 var chat = {
 	nickname     : '',
+	password     : '',
 	server       : '',
 	version      : '0.2',
 	key          : false,
@@ -34,10 +35,11 @@ var chat = {
 		chat.connectWindow.show();
 	},
 
-	connect: function(nickname, server) {
+	connect: function(nickname, password, server) {
 		chat.connectWindow.destroy();
 		chat.connectWindow = false;
 		chat.nickname      = nickname;
+		chat.password      = password;
 		chat.server        = server;
 		chat.initializeIframe();
 	},
