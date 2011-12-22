@@ -89,7 +89,7 @@ class httpdServerClient extends socketServerClient {
 						$channel = IRC_DEFAULT_CHANNEL;
 					}
 					$channel = str_replace("%23", "#", $channel);
-					private $tmp;
+					$tmp;
 					foreach(explode(",",$channel) as $ch) {
 						if(substr($ch, 0, 0) != "#") {
 							$tmp = $tmp + "#" + $ch;
