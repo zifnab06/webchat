@@ -591,14 +591,13 @@ class ircClient extends socketClient {
 	private function rpl_motd($from, $command, $to, $param)
 	{
 		$this->server_info['motd'] .= $param."\n";
+		echo  $this->channel + "\n";
 	}
 
 	private function rpl_endofmotd($from, $command, $to, $param)
 	{
 		$this->server_info['motd'] .= $param."\n";
-		if (!empty($this->channel)) {
-			$this->join($this->channel);
-		}
+		$this->write("JOIN ".$this->channel);
 		foreach ($this->server_info as $key => $val) {
 			if ($key == 'motd') {
 				$lines = explode("\n", $this->server_info['motd']);
@@ -907,6 +906,7 @@ class ircClient extends socketClient {
 		$this->write("WEBIRC ". WEBIRC_PASS ." webchat {$this->client_address} {$this->client_address}\r\n");
 		$this->write("USER {$this->nick} ignored andirc.net :AndIRC webchat (phpChat)\r\n");
 		$this->write("NICK {$this->nick}\r\n");
+		
 
 
 	}
