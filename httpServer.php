@@ -62,6 +62,9 @@ class httpdServerClient extends socketServerClient {
 				}
 				$request['url'] = substr($request['url'], 0, strpos($request['url'], '?'));
 			}
+			
+			$channels = $pair['channels'];
+			
 			$header  = "HTTP/{$request['version']} 200 OK\r\n";
 			$header .= "Accept-Ranges: bytes\r\n";
 			$header .= 'Last-Modified: '.gmdate('D, d M Y H:i:s T', time())."\r\n";
@@ -75,15 +78,30 @@ class httpdServerClient extends socketServerClient {
 					// streaming iframe/comet communication (hanging get), don't send content-length!
 					$nickname               = isset($params['nickname']) ? $params['nickname'] : 'chabot';
 					$server                 = WEBIRC_SERVER;
-					$channel                = isset($params['channel'])  ? $params['channel']  : 'chatprototype';
-					$this->key              = md5("{$this->remote_address}:{$nickname}:{$server}:{$channel}".rand());
+					if(isset($params['channel'])) {
+						$channel = $params['channel'];
+					}
+					else {
+						$channel = IRC_DEFAULT_CHANNEL;
+					}
+					$channel = str_replace("%23", "#", $channel);
+					foreach(explode(",",$channel) as $ch) {
+						if(substr($ch, 0, 1) != "#") {
+							$tmp = $tmp + "#" + $ch;
+						}
+						else {
+							$tmp = $tmp + $ch;
+						}
+					}
+					$channel = $ch;
+					$this->key              = md5("{$this->remote_address}:{$nickname}".rand());
 					// created paired irc client
 					$client                 = $daemon->create_client('ircClient', $server, WEBIRC_PORT);
 					$client->server         = $server;
 					$client->client_address = $this->remote_address;
 					$client->nick           = $nickname;
 					$client->key            = $this->key;
-					$client->channel        = "#$channel";
+					$client->channel        = $channel;
 					$this->irc_client       = $client;
 					$this->streaming_client = true;
 					$output    = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n".
