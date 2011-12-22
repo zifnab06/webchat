@@ -35,5 +35,5 @@ set_time_limit(0);
 
 
 $daemon = new socketDaemon();
-$server = $daemon->create_server('httpdServer', 'httpdServerClient', 0, 2001);
+$server = $daemon->create_server('httpdServer', 'httpdServerClient', 0, HTTP_PORT);
 $daemon->process();
