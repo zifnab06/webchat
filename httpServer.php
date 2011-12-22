@@ -31,7 +31,7 @@ class httpdServerClient extends socketServerClient {
 
 	private function handle_request($request)
 	{
-		echo $request['url'];
+		echo $request['url'] . "\n";
 		global $daemon;
 		$output = '';
 		if (!$request['version'] || ($request['version'] != '1.0' && $request['version'] != '1.1')) {
@@ -49,8 +49,9 @@ class httpdServerClient extends socketServerClient {
 			if (empty($request['url'])) {
 				$request['url'] = '/';
 			}
-			if (substr($request['url'], 0, 1) == "?") {
+			if (substr($request['url'], 1, 2) == "?") {
 				$request['url'] = '/';
+				echo "TRUE!";
 			}
 			if ($request['url'] == '/' || $request['url'] == '/index.html') {
 				$request['url'] = '/chat.html';
