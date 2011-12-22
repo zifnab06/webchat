@@ -144,6 +144,8 @@ class ircClient extends socketClient {
 			case 'quit':
 				$this->quit($param);
 				break;
+			case 'query':
+				break;
 			case 'msg':
 			case 'privmsg':
 			case 'tell':
