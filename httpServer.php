@@ -48,7 +48,11 @@ class httpdServerClient extends socketServerClient {
 			if (empty($request['url'])) {
 				$request['url'] = '/';
 			}
+<<<<<<< HEAD
 			if (substr($request['url'], 0, 1) == "?") {
+=======
+			if (substr($request['url'], 1, 2) == "?") {
+>>>>>>> cdedc94cd405faab4779fb2bfa736f40a96a2f38
 				$request['url'] = '/';
 			}
 			if ($request['url'] == '/' || $request['url'] == '/index.html') {
