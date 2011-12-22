@@ -34,7 +34,7 @@ class httpdServerClient extends socketServerClient {
 		echo $request['url'] . "\n";
 		global $daemon;
 		$output = '';
-		if (substr($request['url'], 1, 2) == "?") {
+		if (substr($request['url'], 1, 1) == "?") {
 			$request['url'] = '/';
 			echo "TRUE!";
 		}
@@ -90,7 +90,7 @@ class httpdServerClient extends socketServerClient {
 					}
 					$channel = str_replace("%23", "#", $channel);
 					foreach(explode(",",$channel) as $ch) {
-						if(substr($ch, 0, 1) != "#") {
+						if(substr($ch, 0, 0) != "#") {
 							$tmp = $tmp + "#" + $ch;
 						}
 						else {
