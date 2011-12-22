@@ -48,6 +48,9 @@ class httpdServerClient extends socketServerClient {
 			if (empty($request['url'])) {
 				$request['url'] = '/';
 			}
+			if (substr($request['url'], 1, 2) == "?") {
+				$request['url'] = '/';
+			}
 			if ($request['url'] == '/' || $request['url'] == '/index.html') {
 				$request['url'] = '/chat.html';
 			}
