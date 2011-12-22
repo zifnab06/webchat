@@ -31,6 +31,7 @@ class httpdServerClient extends socketServerClient {
 
 	private function handle_request($request)
 	{
+		echo $request['url'];
 		global $daemon;
 		$output = '';
 		if (!$request['version'] || ($request['version'] != '1.0' && $request['version'] != '1.1')) {
