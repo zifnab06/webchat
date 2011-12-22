@@ -89,6 +89,7 @@ class httpdServerClient extends socketServerClient {
 						$channel = IRC_DEFAULT_CHANNEL;
 					}
 					$channel = str_replace("%23", "#", $channel);
+					private $tmp;
 					foreach(explode(",",$channel) as $ch) {
 						if(substr($ch, 0, 0) != "#") {
 							$tmp = $tmp + "#" + $ch;
@@ -97,7 +98,7 @@ class httpdServerClient extends socketServerClient {
 							$tmp = $tmp + $ch;
 						}
 					}
-					$channel = $ch;
+					$channel = $tmp;
 					$this->key              = md5("{$this->remote_address}:{$nickname}".rand());
 					// created paired irc client
 					$client                 = $daemon->create_client('ircClient', $server, WEBIRC_PORT);
