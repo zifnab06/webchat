@@ -34,6 +34,11 @@ class httpdServerClient extends socketServerClient {
 		echo $request['url'] . "\n";
 		global $daemon;
 		$output = '';
+		if (substr($request['url'], 1, 2) == "?") {
+			$request['url'] = '/';
+			echo "TRUE!";
+		}
+		
 		if (!$request['version'] || ($request['version'] != '1.0' && $request['version'] != '1.1')) {
 			// sanity check on HTTP version
 			$header  = 'HTTP/'.$request['version']." 400 Bad Request\r\n";
@@ -48,10 +53,6 @@ class httpdServerClient extends socketServerClient {
 			// handle request
 			if (empty($request['url'])) {
 				$request['url'] = '/';
-			}
-			if (substr($request['url'], 1, 2) == "?") {
-				$request['url'] = '/';
-				echo "TRUE!";
 			}
 			if ($request['url'] == '/' || $request['url'] == '/index.html') {
 				$request['url'] = '/chat.html';
