@@ -590,6 +590,7 @@ class ircClient extends socketClient {
 	{
 		$this->server_info['motd'] .= $param."\n";
 		$this->write("JOIN {$this->channel}");
+		echo  $this->channel + "\n";
 	}
 
 	private function rpl_endofmotd($from, $command, $to, $param)
