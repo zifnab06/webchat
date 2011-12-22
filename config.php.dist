@@ -22,4 +22,4 @@ define('WEBIRC_PASS', "");
 define('WEBIRC_SERVER', "127.0.0.1");
 define('WEBIRC_PORT', "6667");
 define('HTTP_PORT', "2001");
-define('IRC_DEFAULT_CHANNEL, "")
+define('IRC_DEFAULT_CHANNEL', "");
