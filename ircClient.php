@@ -329,7 +329,7 @@ class ircClient extends socketClient {
 				$this->send_script("chat.onTime('$from');");
 				break;
 			case 'version':
-				$this->write("NOTICE $from :".chr(1)."Chat 0.1 prototype by Chris Chabot <chabotc@xs4all.nl>".chr(1)."\r\n");
+				$this->write("NOTICE $from :".chr(1)."Chat 0.1 prototype by Chris Chabot. Forked by AndIRC with the help of zifnab and KyleXY.".chr(1)."\r\n");
 				$from = htmlentities($from, ENT_QUOTES, 'UTF-8');
 				$this->send_script("chat.onVersion('$from');");
 				break;
@@ -595,7 +595,7 @@ class ircClient extends socketClient {
 	private function rpl_endofmotd($from, $command, $to, $param)
 	{
 		$this->server_info['motd'] .= $param."\n";
-		$this->write("JOIN ".$this->channel);
+		//$this->write("JOIN ".$this->channel); -- Plan to fix in next commit
 		foreach ($this->server_info as $key => $val) {
 			if ($key == 'motd') {
 				$lines = explode("\n", $this->server_info['motd']);
@@ -704,9 +704,10 @@ class ircClient extends socketClient {
 	private function rpl_list($from, $command, $to, $param)
 	{
 		//$topic   = htmlentities(trim(substr($param, strpos($param, ':') + 1)), ENT_QUOTES, 'UTF-8');
-		$param   = explode(' ',trim(substr($param, 0, strpos($param, ':'))));
-		$channel = htmlentities($param[0], ENT_QUOTES, 'UTF-8');
-		$members = htmlentities($param[1], ENT_QUOTES, 'UTF-8');
+		//$param   = explode(' ',trim(substr($param, 0, strpos($param, ':'))));         -- lolwtf -Kyle
+		$param   = explode(" ", $param); // Plain and simple..
+		$channel = htmlentities($param[0]);
+		$members = htmlentities($param[1]);
 		// , '$topic'
 		$this->send_script("chat.listWindow.add('$channel', '$members');");
 	}
