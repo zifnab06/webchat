@@ -36,7 +36,6 @@ class httpdServerClient extends socketServerClient {
 		$output = '';
 		if (substr($request['url'], 1, 1) == "?") {
 			$request['url'] = '/';
-			echo "TRUE!";
 		}
 		
 		if (!$request['version'] || ($request['version'] != '1.0' && $request['version'] != '1.1')) {
@@ -80,25 +79,26 @@ class httpdServerClient extends socketServerClient {
 					$header .= "Cache-Control: no-cache, must-revalidate\r\n";
 					$header .= "Expires: Mon, 26 Jul 1997 05:00:00 GMT\r\n";
 					// streaming iframe/comet communication (hanging get), don't send content-length!
-					$nickname               = isset($params['nickname']) ? $params['nickname'] : 'chabot';
+					$nickname               = isset($params['nickname']) ? $params['nickname'] : 'WebchatUser'.rand();
 					$server                 = WEBIRC_SERVER;
 					if(isset($params['channel'])) {
 						$channel = $params['channel'];
+						print($params['channel']."\n");
 					}
 					else {
 						$channel = IRC_DEFAULT_CHANNEL;
 					}
-					$channel = str_replace("%23", "#", $channel);
+					$channel = urldecode($channel);
 					$tmp;
 					foreach(explode(",",$channel) as $ch) {
 						if(substr($ch, 0, 0) != "#") {
-							$tmp = $tmp + "#" + $ch;
+							$channel = $channel + "#" + $ch;
 						}
 						else {
-							$tmp = $tmp + $ch;
+							$channel = $channel + $ch;
 						}
 					}
-					$channel = $tmp;
+					print($channel);
 					$this->key              = md5("{$this->remote_address}:{$nickname}".rand());
 					// created paired irc client
 					$client                 = $daemon->create_client('ircClient', $server, WEBIRC_PORT);
@@ -209,7 +209,7 @@ class httpdServerClient extends socketServerClient {
 	public function on_disconnect()
 	{
 		if ($this->irc_client) {
-			$this->irc_client->quit("Remote client closed connection");
+			$this->irc_client->quit("Webchat Closed");
 		}
 	}
 

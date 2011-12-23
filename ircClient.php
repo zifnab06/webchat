@@ -92,6 +92,9 @@ class ircClient extends socketClient {
 			case 'list':
 				$this->channel_list();
 				break;
+			case 'debug':
+				$this->sendDebug();
+				break;
 			case 'topic':
 				if (empty($param)) {
 					$this->get_topic($destination);
@@ -165,6 +168,10 @@ class ircClient extends socketClient {
 	}
 
 	/*** IRC methods ***/
+	
+	public function sendDebug() {
+		$this->send_script("chat.onServerInfo('Debug','{$this->channel}');");
+	}
 	
 	public function join($channel)
 	{
@@ -597,7 +604,7 @@ class ircClient extends socketClient {
 	private function rpl_endofmotd($from, $command, $to, $param)
 	{
 		$this->server_info['motd'] .= $param."\n";
-		//$this->write("JOIN ".$this->channel); -- Plan to fix in next commit
+		$this->write("JOIN ".$this->channel."\r\n"); 
 		foreach ($this->server_info as $key => $val) {
 			if ($key == 'motd') {
 				$lines = explode("\n", $this->server_info['motd']);
@@ -907,9 +914,6 @@ class ircClient extends socketClient {
 		$this->write("WEBIRC ". WEBIRC_PASS ." webchat {$this->client_address} {$this->client_address}\r\n");
 		$this->write("USER {$this->nick} ignored andirc.net :AndIRC webchat (phpChat)\r\n");
 		$this->write("NICK {$this->nick}\r\n");
-		
-
-
 	}
 
 	public function on_read()
