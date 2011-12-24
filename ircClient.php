@@ -148,6 +148,7 @@ class ircClient extends socketClient {
 				$this->quit($param);
 				break;
 			case 'query':
+				$this->on_query($param);
 				break;
 			case 'msg':
 			case 'privmsg':
@@ -306,7 +307,9 @@ class ircClient extends socketClient {
 				$this->on_msg($this->nick, $destination, $msg);
 				$this->handle_write();
 			} else {
-				// this was a priv msg..
+				$this->on_msg($this->nick, $destination, $msg);
+				$this->handle_write();
+// this was a priv msg..
 			}
 		}
 	}
@@ -382,6 +385,11 @@ class ircClient extends socketClient {
 		echo "[IRC] priv_msg $from> $msg\n";
 		$from = htmlentities($from, ENT_QUOTES, 'UTF-8');
 		$msg  = htmlentities($msg,  ENT_QUOTES, 'UTF-8');
+                if (isset($this->tabs[$from])) {
+			$this->handle_write();
+		} else {
+			$this->on_query($from);
+		}
 		$this->send_script("chat.onPrivateMessage('$from','$msg');");
 	}
 
@@ -523,6 +531,12 @@ class ircClient extends socketClient {
 	}
 
 
+
+	/*** query stuff ***/
+	public function on_query($who)
+	{
+		$this->tabs[$who] = new ircChannel($this, $who);
+	}
 	/*** irc state functions ***/
 
 	private function rpl_welcome($from, $command, $to, $param)
@@ -798,16 +812,16 @@ class ircClient extends socketClient {
 		}
 		switch ($command) {
 			case 'PRIVMSG':
-				if ($to == $this->nick) {
-					if (substr($param, 0, 1) == chr(001) && substr($param, strlen($param) - 1, 1) == chr(001)) {
+				if ($to == $this->nick) { //coming to us
+					if (substr($param, 0, 1) == chr(001) && substr($param, strlen($param) - 1, 1) == chr(001)) { //if /me
 						$this->on_privctcp($from, str_replace(chr(001), '', $param));
-					} else {
+					} else { //otherwise, normal privmsg to us
 						$this->on_privmsg($from, $param);
 					}
-				} else {
-					if (substr($param, 0, 1) == chr(001) && substr($param, strlen($param) - 1, 1) == chr(001)) {
+				} else { //going to a channel, or somewhere else
+					if (substr($param, 0, 1) == chr(001) && substr($param, strlen($param) - 1, 1) == chr(001)) { //if /me
 						$this->on_ctcp($from, $to, $param);
-					} else {
+					} else { //else normal channel message
 						$this->on_msg($from, $to, $param);
 					}
 				}
