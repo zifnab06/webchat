@@ -176,10 +176,11 @@ var chat = {
 	},
 
 	onPrivateMessage: function(from, msg) {
-		chat.add('info', '<span class="privmsg">Message from '+from+': <span class="message">'+msg+'</span></span>')
-		if (chat.current != 'info') {
-			chat.add(chat.current, '<span class="privmsg">Message from '+from+': <span class="message">'+msg+'</span></span>')
-		}
+		chat.add(from, '<div class="from">'+from+':</div> <span class="message">'+msg+'</span>');
+//		chat.add('info', '<span class="privmsg">Message from '+from+': <span class="message">'+msg+'</span></span>')
+//		if (chat.current != 'info') {
+//			chat.add(chat.current, '<span class="privmsg">Message from '+from+': <span class="message">'+msg+'</span></span>')
+//		}
 	},
 
 	onServerNotice: function(notice) {
