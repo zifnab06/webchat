@@ -13,7 +13,6 @@ function getUrlVars() {
 
 var chat = {
 	nickname     : '',
-	password     : '',
 	server       : '',
 	chan         : '',
 	version      : '0.2',
@@ -46,11 +45,10 @@ var chat = {
 		chat.connectWindow.show();
 	},
 
-	connect: function(nickname, password, server) {
+	connect: function(nickname, server) {
 		chat.connectWindow.destroy();
 		chat.connectWindow = false;
 		chat.nickname      = nickname;
-		chat.password      = password;
 		chat.server        = server;
 		chat.initializeIframe();
 	},

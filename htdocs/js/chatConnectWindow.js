@@ -26,7 +26,7 @@ Object.extend(Object.extend(chatConnectWindow.prototype, chatWindow.prototype), 
 		server = $A(chat.connectWindow.localServers).random();
 		
 		if (server && nickname != '' && nickname != undefined) {
-			chat.connect(nickname, password, server);
+			chat.connect(nickname, server);
 		}
 	}
 });
