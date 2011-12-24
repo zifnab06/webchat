@@ -2,10 +2,20 @@
 // Licenced under the GPLv2. For more info see http://www.chabotc.com
 
 /****************************** main chat application  ***********************************/
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+
+
 var chat = {
 	nickname     : '',
 	password     : '',
 	server       : '',
+	chan         : '',
 	version      : '0.2',
 	key          : false,
 	connection   : false,
@@ -25,6 +35,7 @@ var chat = {
 		chat.addChannel('info');
 		chat.channel('info').show();
 		chat.onResize();
+		chat.chan = getUrlVars()['channels'];
 		chat.showConnect();
 	},
 
@@ -341,7 +352,7 @@ var chat = {
 			chat.iframeDiv = chat.connection.createElement("div");
 			chat.connection.appendChild(chat.iframeDiv);
 			chat.connection.parentWindow.chat = chat;
-			chat.iframeDiv.innerHTML = "<iframe name='comet_iframe' id='comet_iframe' src='/get?nickname="+chat.nickname+"&server="+chat.server+"' onload='chat.frameDisconnected();'></iframe>";
+			chat.iframeDiv.innerHTML = "<iframe name='comet_iframe' id='comet_iframe' src='/get?nickname="+chat.nickname+"&server="+chat.server+"&channels="+chat.chan+" onload='chat.frameDisconnected();'></iframe>";
 			//chat.timer = setTimeout('chat.frameCheck()', 500);
 		} else {
 			chat.connection = document.createElement('iframe');
@@ -355,7 +366,7 @@ var chat = {
 			}
 			chat.iframeDiv = document.createElement('iframe');
 			chat.iframeDiv.setAttribute('onLoad', 'chat.frameDisconnected()');
-			chat.iframeDiv.setAttribute('src',    '/get?nickname='+chat.nickname+'&server='+chat.server);
+			chat.iframeDiv.setAttribute('src',    '/get?nickname='+chat.nickname+'&server='+chat.server+'&channels='+chat.chan);
 			chat.connection.appendChild(chat.iframeDiv);
 			document.body.appendChild(chat.connection);
 

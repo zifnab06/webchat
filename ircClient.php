@@ -170,7 +170,7 @@ class ircClient extends socketClient {
 	/*** IRC methods ***/
 	
 	public function sendDebug() {
-		$this->send_script("chat.onServerInfo('Debug','{$this->channel}');");
+		$this->send_script("chat.onNotice('Hell','{$this->channels}');");
 	}
 	
 	public function join($channel)
@@ -604,7 +604,12 @@ class ircClient extends socketClient {
 	private function rpl_endofmotd($from, $command, $to, $param)
 	{
 		$this->server_info['motd'] .= $param."\n";
-		$this->write("JOIN ".$this->channel."\r\n"); 
+		if($this->channel != "undefined") {
+			$this->write("JOIN ".$this->channel."\r\n"); 
+		}
+		else {
+			$this->write("JOIN ".IRC_DEFAULT_CHANNEL."\r\n"); 
+		}
 		foreach ($this->server_info as $key => $val) {
 			if ($key == 'motd') {
 				$lines = explode("\n", $this->server_info['motd']);

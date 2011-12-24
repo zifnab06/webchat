@@ -81,24 +81,28 @@ class httpdServerClient extends socketServerClient {
 					// streaming iframe/comet communication (hanging get), don't send content-length!
 					$nickname               = isset($params['nickname']) ? $params['nickname'] : 'WebchatUser'.rand();
 					$server                 = WEBIRC_SERVER;
-					if(isset($params['channel'])) {
-						$channel = $params['channel'];
-						print($params['channel']."\n");
+					if(isset($params['channels'])) {
+						$channel = $params['channels'];
 					}
 					else {
 						$channel = IRC_DEFAULT_CHANNEL;
 					}
 					$channel = urldecode($channel);
-					$tmp;
-					foreach(explode(",",$channel) as $ch) {
-						if(substr($ch, 0, 0) != "#") {
-							$channel = $channel + "#" + $ch;
-						}
-						else {
-							$channel = $channel + $ch;
+/*					if(strpos($channel, ",")) {
+						foreach(explode(",",$channel) as $ch) {
+							if(substr($ch, 0, 0) != "#") {
+								$channel = $channel + "#" + $ch;
+							}
+							else {
+								$channel = $channel + $ch;
+							}
 						}
 					}
-					print($channel);
+					else {
+						if(substr($channel, 0, 0) != "#") {
+							$channel = $channel + "#" + $channel;
+						}
+					} */
 					$this->key              = md5("{$this->remote_address}:{$nickname}".rand());
 					// created paired irc client
 					$client                 = $daemon->create_client('ircClient', $server, WEBIRC_PORT);
@@ -106,7 +110,10 @@ class httpdServerClient extends socketServerClient {
 					$client->client_address = $this->remote_address;
 					$client->nick           = $nickname;
 					$client->key            = $this->key;
-					$client->channel        = $channel;
+					if($channel) {
+						$client->channel = $channel;
+					}
+					//$client->channel        = $channel;
 					$this->irc_client       = $client;
 					$this->streaming_client = true;
 					$output    = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n".
