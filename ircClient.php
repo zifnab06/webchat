@@ -21,7 +21,7 @@ require('ircDefines.php');
 require('ircChannel.php');
 
 class ircClient extends socketClient {
-	private $channels;
+	private $tabs;
 	private $server_info = array();
 	public  $nick;
 	public  $key;
@@ -170,7 +170,7 @@ class ircClient extends socketClient {
 	/*** IRC methods ***/
 	
 	public function sendDebug() {
-		$this->send_script("chat.onNotice('Hell','{$this->channels}');");
+		$this->send_script("chat.onNotice('Hell','{$this->tabs}');");
 	}
 	
 	public function join($channel)
@@ -367,8 +367,8 @@ class ircClient extends socketClient {
 	public function on_nick($from, $to)
 	{
 		echo "[IRC] $from sets nickname to $to\n";
-		if (is_array($this->channels)) {
-			foreach ($this->channels as $channel) {
+		if (is_array($this->tabs)) {
+			foreach ($this->tabs as $channel) {
 				$channel->on_nick($from, $to);
 			}
 		}
@@ -402,8 +402,8 @@ class ircClient extends socketClient {
 	public function on_mode($from, $command, $to, $param)
 	{
 		echo "[IRC] mode from $from: $to [$param]\n";
-		if (isset($this->channels[$to])) {
-			$channel = $this->channels[$to];
+		if (isset($this->tabs[$to])) {
+			$channel = $this->tabs[$to];
 			$param   = trim(substr($param, strpos($param, 'MODE') + strlen('MODE') + strlen($to) + 2));
 			$param   = explode(' ', $param);
 			$mode    = array_shift($param);
@@ -482,22 +482,22 @@ class ircClient extends socketClient {
 
 	public function on_kick($channel, $from, $who, $reason)
 	{
-		if (isset($this->channels[$channel])) $this->channels[$channel]->on_kick($from, $who, $reason);
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->on_kick($from, $who, $reason);
 	}
 
 	public function on_part($who, $channel, $message)
 	{
-		if (isset($this->channels[$channel])) $this->channels[$channel]->on_part($who, $message);
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->on_part($who, $message);
 		if ($who == $this->nick) {
 			$channel = htmlentities($channel, ENT_QUOTES, 'UTF-8');
 			$this->send_script("chat.removeChannel('{$channel}');");
-			unset($this->channels[$channel]);
+			unset($this->tabs[$channel]);
 		}
 	}
 
 	public function on_quit($who)
 	{
-		foreach ($this->channels as $channel) {
+		foreach ($this->tabs as $channel) {
 			$channel->on_quit($who);
 		}
 	}
@@ -509,17 +509,17 @@ class ircClient extends socketClient {
 
 	public function on_join($who, $channel)
 	{
-		if (isset($this->channels[$channel])) $this->channels[$channel]->on_join($who);
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->on_join($who);
 	}
 
 	public function on_joined($channel)
 	{
-		$this->channels[$channel] = new ircChannel($this, $channel);
+		$this->tabs[$channel] = new ircChannel($this, $channel);
 	}
 
 	public function on_topic($channel, $topic)
 	{
-		if (isset($this->channels[$channel])) $this->channels[$channel]->on_topic($topic);
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->on_topic($topic);
 	}
 
 
@@ -629,27 +629,27 @@ class ircClient extends socketClient {
 	{
 		$channel = trim(substr($param, 2, strpos($param, ':') - 2));
 		$names   = explode(' ',substr($param, strpos($param, ':') + 1));
-		if (isset($this->channels[$channel])) $this->channels[$channel]->add_names($names);
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->add_names($names);
 	}
 
 	private function rpl_endofnames($from, $command, $to, $param)
 	{
 		$channel = trim(substr($param, 0, strpos($param, ':')));
-		if (isset($this->channels[$channel])) $this->channels[$channel]->end_of_names();
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->end_of_names();
 	}
 
 	private function rpl_channelmodeis($from, $command, $to, $param)
 	{
 		$channel = trim(substr($param, 0, strpos($param,' ')));
 		$mode    = trim(substr($param, strpos($param, ' ')));
-		if (isset($this->channels[$channel])) $this->channels[$channel]->on_mode($mode);
+		if (isset($this->tabs[$channel])) $this->tabs[$channel]->on_mode($mode);
 	}
 
 	private function rpl_whoreply($from, $command, $to, $param)
 	{
 		$full_name = substr($param, strpos($param, ':') + 1);
 		$params    = explode(' ', $param);
-		foreach ($this->channels as $channel) {
+		foreach ($this->tabs as $channel) {
 			$channel->who($params[1], $params[2], $params[3], $params[4], $full_name);
 		}
 		$ident     = htmlspecialchars($params[1], ENT_QUOTES, 'UTF-8');
@@ -669,7 +669,7 @@ class ircClient extends socketClient {
 	private function rpl_channelcreatetime($from, $command, $to, $param)
 	{
 		$params = explode(' ', $param);
-		if (isset($this->channels[$params[0]])) $this->channels[$params[0]]->channel_created($params[1]);
+		if (isset($this->tabs[$params[0]])) $this->tabs[$params[0]]->channel_created($params[1]);
 	}
 
 	private function rpl_topic($from, $command, $to, $param)
@@ -682,7 +682,7 @@ class ircClient extends socketClient {
 	private function rpl_topicsetby($from, $command, $to, $param)
 	{
 		$params = explode(' ', $param);
-		if (isset($this->channels[$params[0]])) $this->channels[$params[0]]->topic_set_by($params[1], $params[2]);
+		if (isset($this->tabs[$params[0]])) $this->tabs[$params[0]]->topic_set_by($params[1], $params[2]);
 	}
 
 	private function rpl_notopic($from, $command, $to, $param)
