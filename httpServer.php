@@ -87,7 +87,8 @@ class httpdServerClient extends socketServerClient {
 					else {
 						$channel = IRC_DEFAULT_CHANNEL;
 					}
-					$channel = urldecode($channel);
+					$channel = '#'. $channel;
+//$channel = urldecode($channel);
 /*					if(strpos($channel, ",")) {
 						foreach(explode(",",$channel) as $ch) {
 							if(substr($ch, 0, 0) != "#") {
