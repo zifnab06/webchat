@@ -12,6 +12,18 @@
 		<link href="/css/window.css" rel="stylesheet" type="text/css" />
 		<link href="/css/editor.css" rel="stylesheet" type="text/css" />
 		<link href="/css/tab.css"    rel="stylesheet" type="text/css" />
+
+
+		<script type="text/javascript">
+			var IE6 = (navigator.userAgent.indexOf("MSIE 6")>=0) ? true : false;
+			if(IE6) {
+				document.write("Your browser is not supported. Please upgrade to Internet Explorer 7 or above. ");
+				window.stop();
+			}
+		</script>
+
+
+
 		<script type="text/javascript" src="/js/getUrlVars.js"></script>
 		<script type="text/javascript" src="/js/prototype.js"></script>
 		<script type="text/javascript" src="/js/effects.js"></script>
@@ -24,19 +36,6 @@
 		<script type="text/javascript" src="/js/chatConnectWindow.js"></script>
 		<script type="text/javascript" src="/js/chatEditor.js"></script>
 
-		<!--[if lt IE 7.]>
-		<style>
-		.window_handle {
-			background	: url('/images/dialog_sprite.gif') repeat-x 0px -82px;
-		}
-		.sizer, #editor_resizer {
-			background-image : none;
-			margin  : 0;
-			padding : 0;
-			width   : 1px;
-		}
-		</style>
-		<![endif]-->
 	</head>
 	<body>
 		<div id="header">Web<span style="color:#b5cff3; font-size: 14px;">Chat</span>2.0</div>
