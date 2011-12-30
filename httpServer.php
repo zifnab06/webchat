@@ -81,13 +81,8 @@ class httpdServerClient extends socketServerClient {
 					// streaming iframe/comet communication (hanging get), don't send content-length!
 					$nickname               = isset($params['nickname']) ? $params['nickname'] : 'WebchatUser'.rand();
 					$server                 = WEBIRC_SERVER;
-					if(isset($params['channels'])) {
-						$channel = $params['channels'];
-					}
-					else {
-						$channel = IRC_DEFAULT_CHANNEL;
-					}
-					$channel = '#'. $channel;
+					$channel		= isset($params['channels']) ? $params['channels'] : IRC_DEFAULT_CHANNEL;
+
 //$channel = urldecode($channel);
 /*					if(strpos($channel, ",")) {
 						foreach(explode(",",$channel) as $ch) {
@@ -111,7 +106,7 @@ class httpdServerClient extends socketServerClient {
 					$client->client_address = $this->remote_address;
 					$client->nick           = $nickname;
 					$client->key            = $this->key;
-					if($channel) {
+					if(isset($channel)) {
 						$client->channel = $channel;
 					}
 					//$client->channel        = $channel;
